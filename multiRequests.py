@@ -6,11 +6,12 @@ import requests
 
 class ThreadUrl(threading.Thread):
     """Threaded Url Grab"""
-    def __init__(self, inqueue, outqueue):
+    def __init__(self, inqueue, outqueue, kwargs):
         threading.Thread.__init__(self)
         self.in_queue = inqueue
         self.out_queue = outqueue
         #self.method = method
+        self.kwargs = kwargs
 
     def run(self):
         while True:
@@ -22,12 +23,13 @@ class ThreadUrl(threading.Thread):
             try:
                 #url = urllib2.urlopen(myurl, timeout=3)
                 #if self.method =="get":
-                requestObj = requests.get(host)
+                requestObj = requests.get(host, enumerate(self.kwargs))
                 #print(host)
 
-            except:
+            except Exception as e:
                 #print('hit exception....')
                 requestObj = "request_failed"
+                print(e)
                 #pass
             chunk = [host, requestObj]
             #place chunk into out queue
@@ -52,11 +54,12 @@ class DatamineThread(threading.Thread):
             self.out_queue.task_done()
 
 class multiRequests:
-    def __init__(self, urlList, threadCount):
+    def __init__(self, urlList, threadCount, **kwargs):
         self.urlList = urlList
         #self.requestType = requestType
         #self.options = options
         self.threadCount = threadCount
+        self.kwargs = kwargs
     
     def run(self):
         inqueue = queue.Queue()
@@ -64,7 +67,7 @@ class multiRequests:
         requestsLists = []
         #spawn a pool of threads, and pass them queue instance
         for i in range(self.threadCount):
-            t = ThreadUrl(inqueue, outqueue)
+            t = ThreadUrl(inqueue, outqueue, self.kwargs)
             t.setDaemon(True)
             t.start()
         
