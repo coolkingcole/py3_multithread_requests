@@ -76,7 +76,7 @@ class multiRequests:
             inqueue.put(url)
         
         # the threads for the writer, it only needs one really.    
-        for i in range(20):
+        for i in range(2):
             dt = DatamineThread(outqueue,requestsLists)#args.output)
             dt.setDaemon(True)
             dt.start()
