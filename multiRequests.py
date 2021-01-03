@@ -2,7 +2,6 @@ import queue
 import threading
 import time
 import sys
-from argparse import ArgumentParser
 import requests
 
 class ThreadUrl(threading.Thread):
