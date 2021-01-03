@@ -8,3 +8,8 @@ urls = ["https://google.com","https://google.com","https://google.com","https://
 x = multiRequests(urls, 3, headers = HEADERS, timeout = 2)
 y = x.run()
 ```
+# Installation
+python3 -m pip install -r requirements.txt
+
+# Usage
+First arg of multiRequests() is the array of urls to get. 2nd arg is the number of threads to spawn. 3 to n arg is any other option you would want to pass to requests inside each thread. run() will execute the requests. 
